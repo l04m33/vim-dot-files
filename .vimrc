@@ -31,7 +31,7 @@ if has("gui_running")
     elseif MySys() == "windows"
         set gfn=Inconsolata:h13
     endif
-    set guioptions-=T
+    set guioptions=aegit
     colorscheme wombat
 else
     set background=dark
