@@ -32,10 +32,10 @@ if has("gui_running")
         set gfn=Inconsolata:h13
     endif
     set guioptions=aegit
-    colorscheme wombat
+    colorscheme Tomorrow-Night
 else
     set background=dark
-    colorscheme default
+    colorscheme Tomorrow-Night
 endif
 
 " editing options
