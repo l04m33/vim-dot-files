@@ -19,3 +19,9 @@
 [submodule "bundle/Vimerl"]
 	path = bundle/Vimerl
 	url = https://github.com/vim-scripts/Vimerl.git
+[submodule "bundle/slimv.vim"]
+	path = bundle/slimv.vim
+	url = https://github.com/vim-scripts/slimv.vim.git
+[submodule "bundle/vim-tomorrow-theme"]
+	path = bundle/vim-tomorrow-theme
+	url = https://github.com/chriskempson/vim-tomorrow-theme.git
