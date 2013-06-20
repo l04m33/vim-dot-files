@@ -16,9 +16,9 @@
 [submodule "bundle/Wombat"]
 	path = bundle/Wombat
 	url = https://github.com/vim-scripts/Wombat.git
-[submodule "bundle/Vimerl"]
-	path = bundle/Vimerl
-	url = https://github.com/vim-scripts/Vimerl.git
+[submodule "bundle/vimerl"]
+	path = bundle/vimerl
+	url = https://github.com/jimenezrick/vimerl.git
 [submodule "bundle/slimv.vim"]
 	path = bundle/slimv.vim
 	url = https://github.com/vim-scripts/slimv.vim.git
