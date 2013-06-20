@@ -10,18 +10,12 @@
 [submodule "bundle/snipmate.vim"]
 	path = bundle/snipmate.vim
 	url = git://github.com/msanders/snipmate.vim.git
-[submodule "bundle/syntastic"]
-	path = bundle/syntastic
-	url = https://github.com/scrooloose/syntastic.git
-[submodule "bundle/YouCompleteMe"]
-	path = bundle/YouCompleteMe
-	url = https://github.com/Valloric/YouCompleteMe.git
 [submodule "bundle/vim-gitgutter"]
 	path = bundle/vim-gitgutter
 	url = https://github.com/airblade/vim-gitgutter.git
 [submodule "bundle/Wombat"]
 	path = bundle/Wombat
 	url = https://github.com/vim-scripts/Wombat.git
-[submodule "bundle/vim-multiple-cursors"]
-	path = bundle/vim-multiple-cursors
-	url = https://github.com/terryma/vim-multiple-cursors.git
+[submodule "bundle/Vimerl"]
+	path = bundle/Vimerl
+	url = https://github.com/vim-scripts/Vimerl.git
