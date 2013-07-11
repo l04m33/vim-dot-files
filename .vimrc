@@ -89,6 +89,7 @@ noremap <leader>tn :tabnew %<cr>
 noremap <leader>te :tabedit 
 noremap <leader>tc :tabclose<cr>
 noremap <leader>tm :tabmove 
+noremap <leader>to :tabonly<cr>
 noremap <M-1> 1gt
 noremap <M-2> 2gt
 noremap <M-3> 3gt
@@ -124,5 +125,7 @@ noremap <c-c> <esc>
 
 """"""""" plugin settings """""""""
 " airline
-let g:airline_powerline_fonts=1
+if has("gui_running")
+    let g:airline_powerline_fonts=1
+endif
 
