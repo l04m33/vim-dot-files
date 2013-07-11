@@ -129,3 +129,7 @@ if has("gui_running")
     let g:airline_powerline_fonts=1
 endif
 
+" indentLine
+let g:indentLine_color_gui='#404040'
+let g:indentLine_color_term=239
+
