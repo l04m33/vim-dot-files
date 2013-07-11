@@ -10,7 +10,7 @@ endfunction
 set visualbell
 set mouse=a
 set laststatus=2
-set statusline=%(%F%(\ [%Y%M]%)%)%<%=%(\ %l.%02c/%L\ (%p%%)\ %)
+"set statusline=%(%F%(\ [%Y%M]%)%)%<%=%(\ %l.%02c/%L\ (%p%%)\ %)
 set wildmenu
 set pastetoggle=<F3>
 
@@ -27,7 +27,7 @@ autocmd! ColorScheme * call ChangeCursorLine()
 
 if has("gui_running")
     if MySys() == "linux"
-        set gfn=Inconsolata\ 13
+        set gfn=Inconsolata\ for\ Powerline\ 13
     elseif MySys() == "windows"
         set gfn=Inconsolata:h13
     endif
@@ -116,12 +116,6 @@ noremap <leader>P "+P
 noremap <leader>x "+x
 noremap <leader>d "+d
 
-" cscope databases
-function! LoadStdInc()
-    cscope add /home/l_amee/csdb/usr.inc_usr.local.inc/cscope.out
-endfunction
-noremap <leader>lsi :call LoadStdInc()<cr>
-
 noremap <leader>ve :vsplit $MYVIMRC<cr>
 noremap <leader>vs :source $MYVIMRC<cr>
 
@@ -129,4 +123,6 @@ noremap <c-c> <esc>
 
 
 """"""""" plugin settings """""""""
+" airline
+let g:airline_powerline_fonts=1
 
