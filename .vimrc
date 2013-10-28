@@ -133,3 +133,6 @@ endif
 let g:indentLine_color_gui='#404040'
 let g:indentLine_color_term=239
 
+" python-mode
+let g:pymode_lint_checker="pyflakes,pep8"
+
