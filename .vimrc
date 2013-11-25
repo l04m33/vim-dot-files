@@ -18,7 +18,7 @@ Bundle "msanders/snipmate.vim"
 
 Bundle "klen/python-mode"
 Bundle "vim-scripts/slimv.vim"
-Bundle "oscarh/vimerl"
+Bundle "vim-scripts/Vimerl"
 
 Bundle "chriskempson/vim-tomorrow-theme"
 Bundle "vim-scripts/Wombat"
@@ -157,7 +157,3 @@ let g:indentLine_color_term=239
 
 " python-mode
 let g:pymode_lint_checker="pyflakes,pep8"
-
-" vimerl
-let g:erlangCheckFile="~/.vim/bundle/vimerl/compiler/erlang_check_file.erl"
-let g:erlangHighlightErrors=1
