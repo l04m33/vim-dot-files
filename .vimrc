@@ -158,3 +158,6 @@ let g:indentLine_color_term=239
 " python-mode
 let g:pymode_lint_checker="pyflakes,pep8"
 
+" vimerl
+let g:erlangCheckFile="~/.vim/bundle/vimerl/compiler/erlang_check_file.erl"
+let g:erlangHighlightErrors=1
