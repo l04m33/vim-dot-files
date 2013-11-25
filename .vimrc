@@ -18,7 +18,7 @@ Bundle "msanders/snipmate.vim"
 
 Bundle "klen/python-mode"
 Bundle "vim-scripts/slimv.vim"
-Bundle "vim-scripts/Vimerl"
+Bundle "jimenezrick/vimerl"
 
 Bundle "chriskempson/vim-tomorrow-theme"
 Bundle "vim-scripts/Wombat"
