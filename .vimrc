@@ -1,6 +1,27 @@
-call pathogen#infect()
-
+" Setting up Vundle
 set nocp
+filetype off
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+
+" Let Vundle manage Vundle
+" Required by Vundle doc.
+Bundle "gmarik/vundle"
+
+Bundle "Yggdroot/indentLine"
+Bundle "myusuf3/numbers.vim"
+Bundle "airblade/vim-gitgutter"
+Bundle "bling/vim-airline"
+
+Bundle "kien/ctrlp.vim"
+Bundle "msanders/snipmate.vim"
+
+Bundle "klen/python-mode"
+Bundle "vim-scripts/slimv.vim"
+Bundle "oscarh/vimerl"
+
+Bundle "chriskempson/vim-tomorrow-theme"
+Bundle "vim-scripts/Wombat"
 
 function! MySys()
     return "linux"
@@ -53,6 +74,7 @@ set showmatch
 set fileencoding=utf-8
 set fileencodings=utf-8,gbk,big5,shift-jis,euc-kr,latin-1
 set foldmethod=marker
+set nowrap
 
 function! SmarterFoldText()
     let text = foldtext()
