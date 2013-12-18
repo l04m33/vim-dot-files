@@ -12,6 +12,7 @@ Bundle "Yggdroot/indentLine"
 Bundle "myusuf3/numbers.vim"
 Bundle "airblade/vim-gitgutter"
 Bundle "bling/vim-airline"
+Bundle "l04m33/vim-skuld"
 
 Bundle "kien/ctrlp.vim"
 Bundle "msanders/snipmate.vim"
@@ -158,3 +159,7 @@ let g:indentLine_color_term=239
 
 " python-mode
 let g:pymode_lint_checker="pyflakes,pep8"
+
+" skuld
+let g:skuld_progress_symbol="✓"
+
