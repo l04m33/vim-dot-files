@@ -12,14 +12,16 @@ Bundle "Yggdroot/indentLine"
 Bundle "myusuf3/numbers.vim"
 Bundle "airblade/vim-gitgutter"
 Bundle "bling/vim-airline"
-Bundle "l04m33/vim-skuld"
 
 Bundle "kien/ctrlp.vim"
 Bundle "msanders/snipmate.vim"
+Bundle "l04m33/vim-skuld"
+Bundle "Lokaltog/vim-easymotion"
 
 Bundle "klen/python-mode"
 Bundle "vim-scripts/slimv.vim"
 Bundle "jimenezrick/vimerl"
+Bundle 'rstacruz/sparkup', {'rtp': 'vim'}
 
 Bundle "chriskempson/vim-tomorrow-theme"
 Bundle "vim-scripts/Wombat"
