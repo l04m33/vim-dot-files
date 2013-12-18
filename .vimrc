@@ -4,6 +4,10 @@ filetype off
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 
+function! MySys()
+    return "linux"
+endfunction
+
 " Let Vundle manage Vundle
 " Required by Vundle doc.
 Bundle "gmarik/vundle"
@@ -26,10 +30,6 @@ Bundle 'rstacruz/sparkup', {'rtp': 'vim'}
 Bundle "chriskempson/vim-tomorrow-theme"
 Bundle "vim-scripts/Wombat"
 
-function! MySys()
-    return "linux"
-endfunction
-
 " UI options
 set visualbell
 set mouse=a
@@ -49,6 +49,12 @@ endfunction
 " It won't work if I set these directly, so I used an event callback instead
 autocmd! ColorScheme * call ChangeCursorLine()
 
+let s:paths = substitute(escape(&runtimepath, ' '), '\(,\|$\)', '/**\1', 'g')
+let s:colorscheme_file = fnamemodify(findfile('Tomorrow-Night.vim', s:paths), ':p')
+if filereadable(s:colorscheme_file)
+    colorscheme Tomorrow-Night
+endif
+
 if has("gui_running")
     if MySys() == "linux"
         set gfn=Inconsolata\ for\ Powerline\ 13
@@ -56,10 +62,8 @@ if has("gui_running")
         set gfn=Inconsolata:h13
     endif
     set guioptions=aegit
-    colorscheme Tomorrow-Night
 else
     set background=dark
-    colorscheme Tomorrow-Night
 endif
 
 " editing options
