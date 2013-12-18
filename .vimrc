@@ -62,8 +62,6 @@ if has("gui_running")
         set gfn=Inconsolata:h13
     endif
     set guioptions=aegit
-else
-    set background=dark
 endif
 
 " editing options
