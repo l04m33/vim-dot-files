@@ -1,7 +1,7 @@
 #!/bin/env python
 # -*- encoding: utf-8 -*-
 """
-vim-dot-files deploment script.
+vim-dot-files deployment script.
 
 Author:     Kay Zheng <l04m33@gmail.com>
 License:    MIT (http://l04m33.mit-license.org)
@@ -48,7 +48,7 @@ if __name__ == '__main__':
     deploy_commands = [
         "ln -s '{}' '{}'"
         .format(deployed_path + os.path.sep + VIMRC_NAME,
-            user_home + os.path.sep + VIMRC_NAME),
+                user_home + os.path.sep + VIMRC_NAME),
         "cd '{}'; git submodule update --init"
         .format(deployed_path),
         'vim +BundleInstall +qall',
