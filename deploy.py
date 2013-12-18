@@ -46,10 +46,14 @@ if __name__ == '__main__':
     _check_dot_files_path(user_home, deployed_path)
 
     deploy_commands = [
-        'ln -s {} {}'.format(deployed_path + os.path.sep + VIMRC_NAME,
-                             user_home + os.path.sep + VIMRC_NAME),
+        "ln -s '{}' '{}'"
+        .format(deployed_path + os.path.sep + VIMRC_NAME,
+            user_home + os.path.sep + VIMRC_NAME),
+        "cd '{}'; git submodule update --init"
+        .format(deployed_path),
         'vim +BundleInstall +qall',
     ]
+
     for cmd in deploy_commands:
         if os.system(cmd) != 0:
             raise RuntimeError('Failed to execute deploy command: {}'
