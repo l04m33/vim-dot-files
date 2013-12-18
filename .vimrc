@@ -16,6 +16,7 @@ Bundle "Yggdroot/indentLine"
 Bundle "myusuf3/numbers.vim"
 Bundle "airblade/vim-gitgutter"
 Bundle "bling/vim-airline"
+Bundle "junegunn/goyo.vim"
 
 Bundle "kien/ctrlp.vim"
 Bundle "msanders/snipmate.vim"
