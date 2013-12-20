@@ -14,7 +14,7 @@ Bundle "gmarik/vundle"
 
 Bundle "Yggdroot/indentLine"
 Bundle "myusuf3/numbers.vim"
-Bundle "airblade/vim-gitgutter"
+Bundle "mhinz/vim-signify"
 Bundle "bling/vim-airline"
 Bundle "junegunn/goyo.vim"
 
