@@ -65,7 +65,7 @@ if has("gui_running")
     set guioptions=aegit
 endif
 
-" editing options
+" Editing options
 set shiftwidth=4
 set tabstop=4
 set expandtab
@@ -95,14 +95,14 @@ endfunction
 
 set foldtext=SmarterFoldText()
 
-" misc options
+" Misc options
 filetype on
 filetype plugin on
 filetype indent on
 syntax on
 set nu
 
-" key mappings
+" Key mappings
 let mapleader=","
 let g:mapleader=","
 
@@ -149,10 +149,16 @@ noremap <leader>d "+d
 noremap <leader>ve :vsplit $MYVIMRC<cr>
 noremap <leader>vs :source $MYVIMRC<cr>
 
+nnoremap <leader>gw :GrepWR<cr>
+nnoremap <leader>gr :GrepR 
+
 noremap <c-c> <esc>
 
+" Custom commands
+command! -nargs=1 GrepR  execute 'silent grep! -R <args> .' | copen
+command! -nargs=0 GrepWR execute 'silent grep! -R '.expand('<cword>').' .' | copen
 
-""""""""" plugin settings """""""""
+""""""""" Plugin settings """""""""
 " airline
 if has("gui_running")
     let g:airline_powerline_fonts=1
