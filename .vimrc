@@ -22,6 +22,7 @@ Bundle "kien/ctrlp.vim"
 Bundle "msanders/snipmate.vim"
 Bundle "l04m33/vim-skuld"
 Bundle "Lokaltog/vim-easymotion"
+Bundle "tpope/vim-fugitive"
 
 Bundle "klen/python-mode"
 Bundle "vim-scripts/slimv.vim"
