@@ -174,4 +174,5 @@ let g:pymode_lint_checker="pyflakes,pep8"
 
 " skuld
 let g:skuld_progress_symbol="✓"
+let g:skuld_squash_symbol="✗"
 
