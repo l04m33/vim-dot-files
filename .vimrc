@@ -171,6 +171,7 @@ let g:indentLine_color_term=239
 
 " python-mode
 let g:pymode_lint_checker="pyflakes,pep8"
+let g:pymode_rope=0
 
 " skuld
 let g:skuld_progress_symbol="✓"
