@@ -39,6 +39,7 @@ set laststatus=2
 "set statusline=%(%F%(\ [%Y%M]%)%)%<%=%(\ %l.%02c/%L\ (%p%%)\ %)
 set wildmenu
 set pastetoggle=<F3>
+set t_Co=256
 
 function! ChangeCursorLine()
     if has("gui_running")
