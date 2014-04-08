@@ -168,7 +168,7 @@ endif
 
 " indentLine
 let g:indentLine_color_gui='#404040'
-let g:indentLine_color_term=239
+let g:indentLine_color_term=237
 
 " python-mode
 let g:pymode_lint_checker="pyflakes,pep8"
