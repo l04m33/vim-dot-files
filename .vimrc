@@ -27,7 +27,8 @@ Bundle "tpope/vim-fugitive"
 Bundle "klen/python-mode"
 Bundle "vim-scripts/slimv.vim"
 Bundle "jimenezrick/vimerl"
-Bundle 'rstacruz/sparkup', {'rtp': 'vim'}
+Bundle "rstacruz/sparkup", {"rtp": "vim"}
+Bundle "jamessan/vim-gnupg"
 
 Bundle "chriskempson/vim-tomorrow-theme"
 Bundle "vim-scripts/Wombat"
