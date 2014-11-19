@@ -26,7 +26,7 @@ def _get_home():
         raise RuntimeError('Cannot determine $HOME')
     if home.endswith(os.path.sep):
         home = home[0:-1]
-    return home
+    return os.path.realpath(home)
 
 
 def _check_dot_files_path(home, dot_files_path):
