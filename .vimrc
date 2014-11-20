@@ -105,6 +105,7 @@ syntax on
 set nu
 set backupdir=~/.vim_tmp,.
 set directory=~/.vim_tmp,.
+set undodir=~/.vim_tmp,.
 
 " Key mappings
 let mapleader=","
