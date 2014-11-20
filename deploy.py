@@ -14,6 +14,10 @@ import os
 import sys
 
 
+VIMRC_NAME = '.vimrc'
+VIM_DIR_NAME = '.vim'
+
+
 def _get_dot_files_path():
     script_name = sys.argv[0]
     script_path = os.path.abspath(script_name)
@@ -24,18 +28,13 @@ def _get_home():
     home = os.environ.get('HOME', None)
     if home is None:
         raise RuntimeError('Cannot determine $HOME')
-    if home.endswith(os.path.sep):
-        home = home[0:-1]
     return os.path.realpath(home)
 
 
 def _check_dot_files_path(home, dot_files_path):
-    if home + os.path.sep + '.vim' != dot_files_path:
+    if os.path.join(home, VIM_DIR_NAME) != dot_files_path:
         raise RuntimeError('Invalid dot files location: {}'
                            .format(dot_files_path))
-
-
-VIMRC_NAME = '.vimrc'
 
 
 if __name__ == '__main__':
@@ -47,8 +46,8 @@ if __name__ == '__main__':
 
     deploy_commands = [
         "ln -s '{}' '{}'"
-        .format(deployed_path + os.path.sep + VIMRC_NAME,
-                user_home + os.path.sep + VIMRC_NAME),
+        .format(os.path.join(deployed_path, VIMRC_NAME),
+                os.path.join(user_home, VIMRC_NAME)),
         "cd '{}'; git submodule update --init"
         .format(deployed_path),
         'vim +BundleInstall +qall',
