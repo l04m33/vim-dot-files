@@ -103,6 +103,8 @@ filetype plugin on
 filetype indent on
 syntax on
 set nu
+set backupdir=~/.vim_tmp,.
+set directory=~/.vim_tmp,.
 
 " Key mappings
 let mapleader=","
