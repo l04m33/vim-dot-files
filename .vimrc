@@ -19,6 +19,7 @@ Bundle "bling/vim-airline"
 Bundle "junegunn/goyo.vim"
 
 Bundle "kien/ctrlp.vim"
+Bundle "fisadev/vim-ctrlp-cmdpalette"
 Bundle "msanders/snipmate.vim"
 Bundle "l04m33/vim-skuld"
 Bundle "Lokaltog/vim-easymotion"
@@ -157,7 +158,7 @@ noremap <leader>vs :source $MYVIMRC<cr>
 nnoremap <leader>gw :GrepWR<cr>
 nnoremap <leader>gr :GrepR 
 
-noremap <c-c> <esc>
+noremap <C-c> <esc>
 
 " Custom commands
 command! -nargs=1 GrepR  execute 'silent grep! -R <args> .' | copen
@@ -181,3 +182,5 @@ let g:pymode_rope=0
 let g:skuld_progress_symbol="✓"
 let g:skuld_squash_symbol="✗"
 
+" vim-ctrlp-cmdpalette
+noremap <C-m> :CtrlPCmdPalette<cr>
