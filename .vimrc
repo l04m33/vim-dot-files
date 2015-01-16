@@ -183,4 +183,18 @@ let g:skuld_progress_symbol="✓"
 let g:skuld_squash_symbol="✗"
 
 " vim-ctrlp-cmdpalette
-noremap <C-m> :CtrlPCmdPalette<cr>
+noremap <leader>/ :CtrlPCmdPalette<cr>
+
+" Goyo
+function! s:goyo_enter()
+    NumbersDisable
+    set norelativenumber
+endfunction
+
+function! s:goyo_leave()
+    set relativenumber
+    NumbersEnable
+endfunction
+
+autocmd User GoyoEnter nested call <SID>goyo_enter()
+autocmd User GoyoLeave nested call <SID>goyo_leave()
