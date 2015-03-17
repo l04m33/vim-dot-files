@@ -26,6 +26,7 @@ Bundle "Lokaltog/vim-easymotion"
 Bundle "tpope/vim-fugitive"
 
 Bundle "klen/python-mode"
+Bundle "zah/nimrod.vim"
 Bundle "vim-scripts/slimv.vim"
 Bundle "jimenezrick/vimerl"
 Bundle "rstacruz/sparkup", {"rtp": "vim"}
@@ -85,6 +86,7 @@ set fileencodings=utf-8,gbk,big5,shift-jis,euc-kr,latin-1
 set foldmethod=marker
 set nowrap
 
+" Smarter foldtext
 function! SmarterFoldText()
     let text = foldtext()
     let idx = match(text, "^+-\\+[ \t]*[0-9]\\+.\\+:[ \t]*$")
@@ -97,6 +99,17 @@ function! SmarterFoldText()
 endfunction
 
 set foldtext=SmarterFoldText()
+
+" Smarter <C-]>
+function! JumpToDef()
+    if exists("*GotoDefinition_" . &filetype)
+        call GotoDefinition_{&filetype}()
+    else
+        exe "normal! \<C-]>"
+    endif
+endf
+
+nnoremap <C-]> :call JumpToDef()<cr>
 
 " Misc options
 filetype on
