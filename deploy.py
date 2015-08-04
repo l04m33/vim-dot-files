@@ -50,7 +50,7 @@ if __name__ == '__main__':
                 os.path.join(user_home, VIMRC_NAME)),
         "cd '{}'; git submodule update --init"
         .format(deployed_path),
-        'vim +BundleInstall +qall',
+        'vim +PluginInstall +qall',
     ]
 
     for cmd in deploy_commands:

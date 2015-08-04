@@ -1,39 +1,80 @@
-" Setting up Vundle
 set nocp
-filetype off
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
 
 function! MySys()
     return "linux"
 endfunction
 
+" Setting up Vundle
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim/
+call vundle#begin()
+
 " Let Vundle manage Vundle
 " Required by Vundle doc.
-Bundle "gmarik/vundle"
+Plugin 'VundleVim/Vundle.vim'
 
-Bundle "Yggdroot/indentLine"
-Bundle "myusuf3/numbers.vim"
-Bundle "mhinz/vim-signify"
-Bundle "bling/vim-airline"
-Bundle "junegunn/goyo.vim"
+Plugin 'Yggdroot/indentLine'
+Plugin 'myusuf3/numbers.vim'
+Plugin 'mhinz/vim-signify'
+Plugin 'bling/vim-airline'
+Plugin 'junegunn/goyo.vim'
 
-Bundle "kien/ctrlp.vim"
-Bundle "fisadev/vim-ctrlp-cmdpalette"
-Bundle "msanders/snipmate.vim"
-Bundle "l04m33/vim-skuld"
-Bundle "Lokaltog/vim-easymotion"
-Bundle "tpope/vim-fugitive"
+Plugin 'kien/ctrlp.vim'
+Plugin 'fisadev/vim-ctrlp-cmdpalette'
+Plugin 'msanders/snipmate.vim'
+Plugin 'l04m33/vim-skuld'
+Plugin 'Lokaltog/vim-easymotion'
+Plugin 'tpope/vim-fugitive'
 
-Bundle "klen/python-mode"
-Bundle "zah/nimrod.vim"
-Bundle "vim-scripts/slimv.vim"
-Bundle "jimenezrick/vimerl"
-Bundle "rstacruz/sparkup", {"rtp": "vim"}
-Bundle "jamessan/vim-gnupg"
+Plugin 'klen/python-mode'
+Plugin 'zah/nimrod.vim'
+Plugin 'vim-scripts/slimv.vim'
+Plugin 'jimenezrick/vimerl'
+Plugin 'rstacruz/sparkup', {'rtp': 'vim'}
+Plugin 'jamessan/vim-gnupg'
 
-Bundle "chriskempson/vim-tomorrow-theme"
-Bundle "vim-scripts/Wombat"
+Plugin 'chriskempson/vim-tomorrow-theme'
+Plugin 'vim-scripts/Wombat'
+
+""""""""" Plugin settings """""""""
+
+" airline
+if has("gui_running")
+    let g:airline_powerline_fonts=1
+endif
+
+" indentLine
+let g:indentLine_color_gui='#404040'
+let g:indentLine_color_term=237
+
+" python-mode
+let g:pymode_lint_checker=['pyflakes', 'pep8']
+let g:pymode_rope=0
+
+" skuld
+let g:skuld_progress_symbol="✓"
+let g:skuld_squash_symbol="✗"
+
+" vim-ctrlp-cmdpalette
+noremap <leader>/ :CtrlPCmdPalette<cr>
+
+" Goyo
+function! s:goyo_enter()
+    NumbersDisable
+    set norelativenumber
+endfunction
+
+function! s:goyo_leave()
+    set relativenumber
+    NumbersEnable
+endfunction
+
+autocmd User GoyoEnter nested call <SID>goyo_enter()
+autocmd User GoyoLeave nested call <SID>goyo_leave()
+
+""""""""" End of plugin settings """""""""
+
+call vundle#end()
 
 " UI options
 set visualbell
@@ -177,37 +218,3 @@ noremap <C-c> <esc>
 command! -nargs=1 GrepR  execute 'silent grep! -R <args> .' | copen
 command! -nargs=0 GrepWR execute 'silent grep! -R '.expand('<cword>').' .' | copen
 
-""""""""" Plugin settings """""""""
-" airline
-if has("gui_running")
-    let g:airline_powerline_fonts=1
-endif
-
-" indentLine
-let g:indentLine_color_gui='#404040'
-let g:indentLine_color_term=237
-
-" python-mode
-let g:pymode_lint_checker=['pyflakes', 'pep8']
-let g:pymode_rope=0
-
-" skuld
-let g:skuld_progress_symbol="✓"
-let g:skuld_squash_symbol="✗"
-
-" vim-ctrlp-cmdpalette
-noremap <leader>/ :CtrlPCmdPalette<cr>
-
-" Goyo
-function! s:goyo_enter()
-    NumbersDisable
-    set norelativenumber
-endfunction
-
-function! s:goyo_leave()
-    set relativenumber
-    NumbersEnable
-endfunction
-
-autocmd User GoyoEnter nested call <SID>goyo_enter()
-autocmd User GoyoLeave nested call <SID>goyo_leave()
