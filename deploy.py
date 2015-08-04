@@ -51,7 +51,7 @@ if __name__ == '__main__':
                 os.path.join(user_home, VIMRC_NAME)),
 
         "mkdir '{}'"
-        .format(os.path.join(deployed_path, VIM_TMP_DIR_NAME)),
+        .format(os.path.join(user_home, VIM_TMP_DIR_NAME)),
 
         "cd '{}'; git submodule update --init"
         .format(deployed_path),
