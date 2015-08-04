@@ -16,6 +16,7 @@ import sys
 
 VIMRC_NAME = '.vimrc'
 VIM_DIR_NAME = '.vim'
+VIM_TMP_DIR_NAME = '.vim_tmp'
 
 
 def _get_dot_files_path():
@@ -48,9 +49,14 @@ if __name__ == '__main__':
         "ln -s '{}' '{}'"
         .format(os.path.join(deployed_path, VIMRC_NAME),
                 os.path.join(user_home, VIMRC_NAME)),
+
+        "mkdir '{}'"
+        .format(os.path.join(deployed_path, VIM_TMP_DIR_NAME)),
+
         "cd '{}'; git submodule update --init"
         .format(deployed_path),
-        'vim +PluginInstall +qall',
+
+        "vim +PluginInstall +qall",
     ]
 
     for cmd in deploy_commands:
