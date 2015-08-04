@@ -188,7 +188,7 @@ let g:indentLine_color_gui='#404040'
 let g:indentLine_color_term=237
 
 " python-mode
-let g:pymode_lint_checker="pyflakes,pep8"
+let g:pymode_lint_checker=['pyflakes', 'pep8']
 let g:pymode_rope=0
 
 " skuld
