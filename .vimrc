@@ -55,9 +55,6 @@ let g:pymode_rope=0
 let g:skuld_progress_symbol="✓"
 let g:skuld_squash_symbol="✗"
 
-" vim-ctrlp-cmdpalette
-noremap <leader>/ :CtrlPCmdPalette<cr>
-
 " Goyo
 function! s:goyo_enter()
     NumbersDisable
@@ -213,6 +210,9 @@ nnoremap <leader>gw :GrepWR<cr>
 nnoremap <leader>gr :GrepR 
 
 inoremap <C-c> <esc>
+
+" vim-ctrlp-cmdpalette
+noremap <leader>/ :CtrlPCmdPalette<cr>
 
 " Custom commands
 command! -nargs=1 GrepR  execute 'silent grep! -R <args> .' | copen
