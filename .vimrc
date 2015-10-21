@@ -171,8 +171,8 @@ noremap <C-k> <C-W>k
 noremap <C-h> <C-W>h
 noremap <C-l> <C-W>l
 
-nnoremap H ^
-nnoremap L $
+noremap H ^
+noremap L $
 
 noremap <leader>tn :tabnew %<cr>
 noremap <leader>te :tabedit 
@@ -212,7 +212,7 @@ noremap <leader>vs :source $MYVIMRC<cr>
 nnoremap <leader>gw :GrepWR<cr>
 nnoremap <leader>gr :GrepR 
 
-noremap <C-c> <esc>
+inoremap <C-c> <esc>
 
 " Custom commands
 command! -nargs=1 GrepR  execute 'silent grep! -R <args> .' | copen
