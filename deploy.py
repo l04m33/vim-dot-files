@@ -46,10 +46,6 @@ if __name__ == '__main__':
     _check_dot_files_path(user_home, deployed_path)
 
     deploy_commands = [
-        "ln -s '{}' '{}'"
-        .format(os.path.join(deployed_path, VIMRC_NAME),
-                os.path.join(user_home, VIMRC_NAME)),
-
         "mkdir '{}'"
         .format(os.path.join(user_home, VIM_TMP_DIR_NAME)),
 
