@@ -26,7 +26,8 @@ Plugin 'l04m33/vim-skuld'
 Plugin 'Lokaltog/vim-easymotion'
 Plugin 'tpope/vim-fugitive'
 
-Plugin 'klen/python-mode'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'nvie/vim-flake8'
 Plugin 'zah/nimrod.vim'
 Plugin 'vim-scripts/slimv.vim'
 Plugin 'jimenezrick/vimerl'
@@ -47,9 +48,11 @@ endif
 let g:indentLine_color_gui='#404040'
 let g:indentLine_color_term=237
 
-" python-mode
-let g:pymode_lint_checker=['pyflakes', 'pep8']
-let g:pymode_rope=0
+" vim-jedi
+let g:jedi#force_py_version = 3
+
+" vim-flake8
+let g:flake8_cmd='python3-flake8'
 
 " skuld
 let g:skuld_progress_symbol="✓"
