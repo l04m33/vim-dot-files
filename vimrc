@@ -29,7 +29,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'davidhalter/jedi-vim'
 Plugin 'nvie/vim-flake8'
 Plugin 'zah/nimrod.vim'
-Plugin 'vim-scripts/slimv.vim'
+Plugin 'kovisoft/slimv'
 Plugin 'jimenezrick/vimerl'
 Plugin 'rstacruz/sparkup', {'rtp': 'vim'}
 Plugin 'jamessan/vim-gnupg'
