@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/bin/env python3
 # -*- encoding: utf-8 -*-
 """
 vim-dot-files deployment script.
@@ -8,15 +8,16 @@ License:    MIT (http://l04m33.mit-license.org)
 
 """
 
-from __future__ import print_function
-
 import os
 import sys
+import itertools
 
 
-VIMRC_NAME = '.vimrc'
 VIM_DIR_NAME = '.vim'
 VIM_TMP_DIR_NAME = '.vim_tmp'
+BUNDLE_DIR_NAME = 'bundle'
+VUNDLE_DIR_NAME = 'Vundle.vim'
+VUNDLE_GIT_URL = 'https://github.com/VundleVim/Vundle.vim.git'
 
 
 def _get_dot_files_path():
@@ -38,6 +39,20 @@ def _check_dot_files_path(home, dot_files_path):
                            .format(dot_files_path))
 
 
+def _mkdir(path):
+    if not os.path.isdir(path):
+        os.mkdir(path)
+
+
+def _git_clone(url, path):
+    if os.path.isdir(path) and os.path.isdir(os.path.join(path, '.git')):
+        return
+    cmd = "git clone '{}' '{}'".format(url, path)
+    if os.system(cmd) != 0:
+        raise RuntimeError(
+            "Failed to clone '{}' into '{}'".format(url, path))
+
+
 if __name__ == '__main__':
     deployed_path = _get_dot_files_path()
     print('Deployed path: {}'.format(deployed_path))
@@ -45,17 +60,20 @@ if __name__ == '__main__':
     user_home = _get_home()
     _check_dot_files_path(user_home, deployed_path)
 
-    deploy_commands = [
-        "mkdir '{}'"
-        .format(os.path.join(user_home, VIM_TMP_DIR_NAME)),
+    _mkdir(os.path.join(user_home, VIM_TMP_DIR_NAME))
+    _mkdir(os.path.join(deployed_path, BUNDLE_DIR_NAME))
 
-        "cd '{}'; git submodule update --init"
-        .format(deployed_path),
+    clone_into = itertools.accumulate(
+        [deployed_path, BUNDLE_DIR_NAME, VUNDLE_DIR_NAME],
+        os.path.join)
+    clone_into = list(clone_into)[-1]
+    _git_clone(VUNDLE_GIT_URL, clone_into)
 
+    extra_deploy_commands = [
         "vim +PluginInstall +qall",
     ]
 
-    for cmd in deploy_commands:
+    for cmd in extra_deploy_commands:
         if os.system(cmd) != 0:
             raise RuntimeError('Failed to execute deploy command: {}'
                                .format(cmd))
