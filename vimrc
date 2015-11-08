@@ -49,10 +49,14 @@ let g:indentLine_color_gui='#404040'
 let g:indentLine_color_term=237
 
 " vim-jedi
-let g:jedi#force_py_version = 3
+let g:jedi#force_py_version=3
 
 " vim-flake8
 let g:flake8_cmd='python3-flake8'
+
+" slimv
+let g:slimv_leader='\'
+let g:paredit_leader='\'
 
 " skuld
 let g:skuld_progress_symbol="✓"
