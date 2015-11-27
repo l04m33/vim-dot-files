@@ -165,6 +165,7 @@ set nu
 set backupdir=~/.vim_tmp,.
 set directory=~/.vim_tmp,.
 set undodir=~/.vim_tmp,.
+let g:lisp_rainbow=1
 
 " Key mappings
 let mapleader=","
