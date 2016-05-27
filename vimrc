@@ -105,7 +105,7 @@ endif
 
 if has("gui_running")
     if MySys() == "linux"
-        set gfn=Inconsolata\ for\ Powerline\ 13
+        set gfn=Inconsolata\ NF\ Complete\ Custom\ 13
     elseif MySys() == "windows"
         set gfn=Inconsolata:h13
     endif
