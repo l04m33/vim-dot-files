@@ -40,9 +40,7 @@ Plugin 'vim-scripts/Wombat'
 """"""""" Plugin settings """""""""
 
 " airline
-if has("gui_running")
-    let g:airline_powerline_fonts=1
-endif
+let g:airline_powerline_fonts=1
 
 " indentLine
 let g:indentLine_color_gui='#404040'
