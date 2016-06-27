@@ -16,25 +16,25 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'Yggdroot/indentLine'
 Plugin 'myusuf3/numbers.vim'
 Plugin 'mhinz/vim-signify'
-Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'junegunn/goyo.vim'
 
 Plugin 'kien/ctrlp.vim'
 Plugin 'fisadev/vim-ctrlp-cmdpalette'
 Plugin 'msanders/snipmate.vim'
 Plugin 'l04m33/vim-skuld'
-Plugin 'Lokaltog/vim-easymotion'
+Plugin 'easymotion/vim-easymotion'
 Plugin 'tpope/vim-fugitive'
 
 Plugin 'davidhalter/jedi-vim'
 Plugin 'nvie/vim-flake8'
-Plugin 'zah/nimrod.vim'
+Plugin 'zah/nim.vim'
 Plugin 'kovisoft/slimv'
-Plugin 'jimenezrick/vimerl'
 Plugin 'rstacruz/sparkup', {'rtp': 'vim'}
 Plugin 'jamessan/vim-gnupg'
 
-Plugin 'chriskempson/vim-tomorrow-theme'
+Plugin 'chriskempson/tomorrow-theme', {'rtp': 'vim'}
 Plugin 'vim-scripts/Wombat'
 
 """"""""" Plugin settings """""""""
