@@ -74,6 +74,10 @@ endfunction
 autocmd User GoyoEnter nested call <SID>goyo_enter()
 autocmd User GoyoLeave nested call <SID>goyo_leave()
 
+" vim-gnupg
+
+let g:GPGExecutable="gpg2"
+
 """"""""" End of plugin settings """""""""
 
 call vundle#end()
