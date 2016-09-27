@@ -55,6 +55,7 @@ def get_config_file():
 
 
 def read_config(conf_file):
+    logger().debug('Reading config file \'{}\''.format(conf_file))
     with open(conf_file, mode='r') as cf:
         return json.load(cf)
 
@@ -188,12 +189,15 @@ if __name__ == '__main__':
     ensure_dir_exists(os.path.join(WORKING_DIR, PACK_DIR_NAME))
     ensure_dir_exists(os.path.join(WORKING_DIR, REPO_DIR_NAME))
 
+    if len(sys.argv) < 2:
+        raise RuntimeError('No command specified.')
+
     if sys.argv[1] == 'install':
         cb = install_plugin
     elif sys.argv[1] == 'update':
         cb = update_plugin
     else:
-        raise RuntimeError('Unknown command \'{}\'.'.format(argv[1]))
+        raise RuntimeError('Unknown command \'{}\'.'.format(sys.argv[1]))
 
     for idx, (pack, conf) in enumerate(config.items(), start=1):
         logger().info(
