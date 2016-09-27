@@ -1,0 +1,37 @@
+{
+    "me": {
+        "start": [
+            "Yggdroot/indentLine",
+            "myusuf3/numbers.vim",
+            "mhinz/vim-signify",
+            "vim-airline/vim-airline",
+            "vim-airline/vim-airline-themes",
+            "junegunn/goyo.vim",
+
+            "kien/ctrlp.vim",
+            "fisadev/vim-ctrlp-cmdpalette",
+            "msanders/snipmate.vim",
+            "l04m33/vim-skuld",
+            "easymotion/vim-easymotion",
+            "tpope/vim-fugitive",
+
+            "davidhalter/jedi-vim",
+            "nvie/vim-flake8",
+            "zah/nim.vim",
+            "kovisoft/slimv",
+            "jamessan/vim-gnupg",
+            {
+                "source": "rstacruz/sparkup",
+                "subpath": "vim"
+            }
+        ],
+
+        "opt": [
+            "vim-scripts/Wombat",
+            {
+                "source":  "chriskempson/tomorrow-theme",
+                "subpath": "vim"
+            }
+        ]
+    }
+}

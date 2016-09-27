@@ -4,39 +4,6 @@ function! MySys()
     return "linux"
 endfunction
 
-" Setting up Vundle
-filetype off
-set rtp+=~/.vim/bundle/Vundle.vim/
-call vundle#begin()
-
-" Let Vundle manage Vundle
-" Required by Vundle doc.
-Plugin 'VundleVim/Vundle.vim'
-
-Plugin 'Yggdroot/indentLine'
-Plugin 'myusuf3/numbers.vim'
-Plugin 'mhinz/vim-signify'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'junegunn/goyo.vim'
-
-Plugin 'kien/ctrlp.vim'
-Plugin 'fisadev/vim-ctrlp-cmdpalette'
-Plugin 'msanders/snipmate.vim'
-Plugin 'l04m33/vim-skuld'
-Plugin 'easymotion/vim-easymotion'
-Plugin 'tpope/vim-fugitive'
-
-Plugin 'davidhalter/jedi-vim'
-Plugin 'nvie/vim-flake8'
-Plugin 'zah/nim.vim'
-Plugin 'kovisoft/slimv'
-Plugin 'rstacruz/sparkup', {'rtp': 'vim'}
-Plugin 'jamessan/vim-gnupg'
-
-Plugin 'chriskempson/tomorrow-theme', {'rtp': 'vim'}
-Plugin 'vim-scripts/Wombat'
-
 """"""""" Plugin settings """""""""
 
 " airline
@@ -79,8 +46,6 @@ autocmd User GoyoLeave nested call <SID>goyo_leave()
 let g:GPGExecutable="gpg2"
 
 """"""""" End of plugin settings """""""""
-
-call vundle#end()
 
 " UI options
 set visualbell

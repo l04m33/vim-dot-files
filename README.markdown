@@ -11,24 +11,7 @@ Deployment
 ```Shell
     cd ~
     git clone https://github.com/l04m33/vim-dot-files.git .vim
-    ./.vim/deploy.py
+    .vim/vamp.py install
 ```
 
-Only the macho Linux™ is supported, no sissy Windows™.
-
-这是神马？
-==========
-
-这是哥的Vim配置，应该对你没什么用。如果你是不小心晃进来的，马上离开，我可
-能会放过你（磨刀中）。
-
-部署
-====
-
-```Shell
-    cd ~
-    git clone https://github.com/l04m33/vim-dot-files.git .vim
-    ./.vim/deploy.py
-```
-
-只支持纯爷们的Linux™，别指望能在娘们的Windows™上用。
+Only Linux™ and Vim 8 are supported.
