@@ -58,8 +58,8 @@ set pastetoggle=<F3>
 function! ChangeCursorLine()
     if has("gui_running")
         set cursorline
-        hi CursorLine guibg=Grey30
-        hi CursorColumn guibg=Grey30
+        hi CursorLine guibg=Grey20
+        hi CursorColumn guibg=Grey20
     endif
 endfunction
 
