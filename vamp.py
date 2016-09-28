@@ -107,6 +107,8 @@ def update_plugin_from_github(package_name, load_type, plugin):
     if r.returncode != 0:
         logger('git').error(indent_lines(r.stderr, 6))
         return
+    if r.stdout.strip() != 'Already up-to-date.':
+        logger().info(indent_lines('Updated \'{}\'.', 6).format(repo_name))
 
 
 PluginCallbacks = namedtuple('PluginCallbacks',
@@ -204,3 +206,8 @@ if __name__ == '__main__':
                 '({}/{}) Package \'{}\''
                 .format(idx, len(config), pack))
         walk_package(pack, conf, cb)
+
+    logger().info('Running helptags.')
+    r = subprocess.run(['vim', '+helptags ALL', '+quit'])
+    if r.returncode != 0:
+        logger('vim').error('Failed to run helptags.')
