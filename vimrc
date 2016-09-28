@@ -54,17 +54,7 @@ set laststatus=2
 "set statusline=%(%F%(\ [%Y%M]%)%)%<%=%(\ %l.%02c/%L\ (%p%%)\ %)
 set wildmenu
 set pastetoggle=<F3>
-
-function! ChangeCursorLine()
-    if has("gui_running")
-        set cursorline
-        hi CursorLine guibg=Grey20
-        hi CursorColumn guibg=Grey20
-    endif
-endfunction
-
-" It won't work if I set these directly, so I used an event callback instead
-autocmd! ColorScheme * call ChangeCursorLine()
+set cursorline
 
 let s:paths = substitute(escape(&runtimepath, ' '), '\(,\|$\)', '/**\1', 'g')
 let s:colorscheme_file = fnamemodify(findfile('Tomorrow-Night.vim', s:paths), ':p')
