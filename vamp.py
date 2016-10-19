@@ -87,7 +87,7 @@ def install_github_plugin(package_name, load_type, plugin):
                 universal_newlines=True)
         if r.returncode != 0:
             logger('git').error(indent_lines(r.stderr, 6))
-            remove_plugin(package_name, load_type, plugin)
+            remove_generic_plugin(package_name, load_type, plugin)
             return
         marker_file = os.path.join(repo_dir, MARKER_FILE_NAME)
         touch(marker_file)
@@ -120,17 +120,31 @@ def update_github_plugin(package_name, load_type, plugin):
         logger().info(indent_lines('Updated \'{}\'.', 6).format(repo_name))
 
 
+def remove_generic_plugin(package_name, load_type, plugin):
+    repo_name = get_repo_name(plugin)
+    repo_dir = get_repo_dir(repo_name)
+    plugin_dir = get_plugin_dir(package_name, load_type, repo_name)
+    try:
+        shutil.rmtree(repo_dir)
+    except FileNotFoundError:
+        pass
+    try:
+        os.unlink(plugin_dir)
+    except FileNotFoundError:
+        pass
+    logger().info(indent_lines('Removed \'{}\'.', 6).format(repo_name))
+
+
 def clean_generic_plugin(package_name, load_type, plugin):
     repo_name = get_repo_name(plugin)
     repo_dir = get_repo_dir(repo_name)
     marker_file = os.path.join(repo_dir, MARKER_FILE_NAME)
     if os.path.isdir(repo_dir) and not os.path.isfile(marker_file):
-        remove_plugin(package_name, load_type, plugin)
-        logger().info(indent_lines('Removed \'{}\'.', 6).format(repo_name))
+        remove_generic_plugin(package_name, load_type, plugin)
 
 
 PluginCallbacks = namedtuple('PluginCallbacks',
-        ['repo_name', 'install', 'update', 'clean'])
+        ['repo_name', 'install', 'update', 'remove', 'clean'])
 
 
 PLUGIN_CALLBACKS = {
@@ -138,6 +152,7 @@ PLUGIN_CALLBACKS = {
             get_github_repo_name,
             install_github_plugin,
             update_github_plugin,
+            remove_generic_plugin,
             clean_generic_plugin)
         }
 
@@ -156,33 +171,36 @@ def get_repo_name(plugin):
     return repo_name_cb(plugin)
 
 
-def install_plugin(package_name, load_type, plugin):
-    install_cb = get_plugin_callbacks(plugin).install
-    return install_cb(package_name, load_type, plugin)
+def install_plugin(package_name, load_type, plugin, rest_argv):
+    if len(rest_argv) == 0 or get_repo_name(plugin) in rest_argv:
+        install_cb = get_plugin_callbacks(plugin).install
+        return install_cb(package_name, load_type, plugin)
 
 
-def update_plugin(package_name, load_type, plugin):
-    update_cb = get_plugin_callbacks(plugin).update
-    return update_cb(package_name, load_type, plugin)
+def update_plugin(package_name, load_type, plugin, rest_argv):
+    if len(rest_argv) == 0 or get_repo_name(plugin) in rest_argv:
+        update_cb = get_plugin_callbacks(plugin).update
+        return update_cb(package_name, load_type, plugin)
 
 
-def clean_plugin(package_name, load_type, plugin):
-    clean_cb = get_plugin_callbacks(plugin).clean
-    return clean_cb(package_name, load_type, plugin)
+def clean_plugin(package_name, load_type, plugin, rest_argv):
+    if len(rest_argv) == 0 or get_repo_name(plugin) in rest_argv:
+        clean_cb = get_plugin_callbacks(plugin).clean
+        return clean_cb(package_name, load_type, plugin)
 
 
-def remove_plugin(package_name, load_type, plugin):
-    repo_name = get_repo_name(plugin)
-    repo_dir = get_repo_dir(repo_name)
-    plugin_dir = get_plugin_dir(package_name, load_type, repo_name)
-    try:
-        shutil.rmtree(repo_dir)
-    except FileNotFoundError:
-        pass
-    try:
-        os.unlink(plugin_dir)
-    except FileNotFoundError:
-        pass
+def remove_plugin(package_name, load_type, plugin, rest_argv):
+    if len(rest_argv) == 0 or get_repo_name(plugin) in rest_argv:
+        remove_cb = get_plugin_callbacks(plugin).remove
+        return remove_cb(package_name, load_type, plugin)
+
+
+def list_plugin(package_name, load_type, plugin, rest_argv):
+    if len(rest_argv) == 0 or get_repo_name(plugin) in rest_argv:
+        logger().info(indent_lines('Type: \'{}\'.', 6).format(plugin['type']))
+        logger().info(indent_lines('Source: \'{}\'.', 6).format(plugin['source']))
+        if 'subpath' in plugin:
+            logger().info(indent_lines('Subpath: \'{}\'.', 6).format(plugin['subpath']))
 
 
 def normalize_plugin_spec(plugin):
@@ -193,7 +211,7 @@ def normalize_plugin_spec(plugin):
     return defaults
 
 
-def walk_package(package_name, conf, cb):
+def walk_package(package_name, conf, rest_argv, cb):
     ensure_dir_exists(get_package_dir(package_name))
     for idx, (load_type, plugin_list) in enumerate(conf.items(), start=1):
         logger().info(
@@ -205,7 +223,7 @@ def walk_package(package_name, conf, cb):
             logger().info(
                     indent_lines('({}/{}) Plugin \'{}\'', 4)
                     .format(idx, len(plugin_list), p['source']))
-            cb(package_name, load_type, p)
+            cb(package_name, load_type, p, rest_argv)
 
 
 if __name__ == '__main__':
@@ -222,18 +240,24 @@ if __name__ == '__main__':
         cb = install_plugin
     elif sys.argv[1] == 'update':
         cb = update_plugin
+    elif sys.argv[1] == 'remove':
+        cb = remove_plugin
     elif sys.argv[1] == 'clean':
         cb = clean_plugin
+    elif sys.argv[1] == 'list':
+        cb = list_plugin
     else:
         raise RuntimeError('Unknown command \'{}\'.'.format(sys.argv[1]))
 
+    rest_argv = sys.argv[2:]
     for idx, (pack, conf) in enumerate(config.items(), start=1):
         logger().info(
                 '({}/{}) Package \'{}\''
                 .format(idx, len(config), pack))
-        walk_package(pack, conf, cb)
+        walk_package(pack, conf, rest_argv, cb)
 
-    logger().info('Running helptags.')
-    r = subprocess.run(['vim', '+helptags ALL', '+quit'])
-    if r.returncode != 0:
-        logger('vim').error('Failed to run helptags.')
+    if sys.argv[1] != 'list':
+        logger().info('Running helptags.')
+        r = subprocess.run(['vim', '+helptags ALL', '+quit'])
+        if r.returncode != 0:
+            logger('vim').error('Failed to run helptags.')
