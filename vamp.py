@@ -5,6 +5,7 @@ import os
 import sys
 import json
 import subprocess
+import shutil
 import logging
 from collections import namedtuple
 
@@ -14,6 +15,7 @@ WORKING_DIR = os.path.dirname(os.path.abspath(sys.argv[0]))
 PACK_DIR_NAME = 'pack'
 REPO_DIR_NAME = 'repo'
 CONFIG_FILE_NAME = 'vamp.json'
+MARKER_FILE_NAME = '.vamp'
 
 
 def logger(name=''):
@@ -29,6 +31,11 @@ def ensure_dir_exists(path):
     try:
         os.mkdir(path)
     except FileExistsError:
+        pass
+
+
+def touch(path):
+    with open(path, 'a+'):
         pass
 
 
@@ -68,7 +75,7 @@ def get_github_repo_name(plugin):
     return plugin['source'].split('/')[1]
 
 
-def install_plugin_from_github(package_name, load_type, plugin):
+def install_github_plugin(package_name, load_type, plugin):
     repo_name = get_github_repo_name(plugin)
     repo_dir = get_repo_dir(repo_name)
     if os.path.isdir(repo_dir) and os.path.isdir(os.path.join(repo_dir, '.git')):
@@ -80,8 +87,10 @@ def install_plugin_from_github(package_name, load_type, plugin):
                 universal_newlines=True)
         if r.returncode != 0:
             logger('git').error(indent_lines(r.stderr, 6))
-            clean_up_plugin(package_name, load_type, plugin)
+            remove_plugin(package_name, load_type, plugin)
             return
+        marker_file = os.path.join(repo_dir, MARKER_FILE_NAME)
+        touch(marker_file)
 
     if 'subpath' in plugin:
         ln_target = os.path.join(repo_dir, plugin['subpath'])
@@ -97,7 +106,7 @@ def install_plugin_from_github(package_name, load_type, plugin):
         logger('symlink').error(indent_lines(repr(e), 6))
 
 
-def update_plugin_from_github(package_name, load_type, plugin):
+def update_github_plugin(package_name, load_type, plugin):
     repo_name = get_github_repo_name(plugin)
     repo_dir = get_repo_dir(repo_name)
     r = subprocess.run('cd \'{}\'; git pull'.format(repo_dir),
@@ -111,15 +120,25 @@ def update_plugin_from_github(package_name, load_type, plugin):
         logger().info(indent_lines('Updated \'{}\'.', 6).format(repo_name))
 
 
+def clean_generic_plugin(package_name, load_type, plugin):
+    repo_name = get_repo_name(plugin)
+    repo_dir = get_repo_dir(repo_name)
+    marker_file = os.path.join(repo_dir, MARKER_FILE_NAME)
+    if os.path.isdir(repo_dir) and not os.path.isfile(marker_file):
+        remove_plugin(package_name, load_type, plugin)
+        logger().info(indent_lines('Removed \'{}\'.', 6).format(repo_name))
+
+
 PluginCallbacks = namedtuple('PluginCallbacks',
-        ['repo_name', 'install', 'update'])
+        ['repo_name', 'install', 'update', 'clean'])
 
 
 PLUGIN_CALLBACKS = {
         'github': PluginCallbacks(
             get_github_repo_name,
-            install_plugin_from_github,
-            update_plugin_from_github)
+            install_github_plugin,
+            update_github_plugin,
+            clean_generic_plugin)
         }
 
 
@@ -147,12 +166,17 @@ def update_plugin(package_name, load_type, plugin):
     return update_cb(package_name, load_type, plugin)
 
 
-def clean_up_plugin(package_name, load_type, plugin):
+def clean_plugin(package_name, load_type, plugin):
+    clean_cb = get_plugin_callbacks(plugin).clean
+    return clean_cb(package_name, load_type, plugin)
+
+
+def remove_plugin(package_name, load_type, plugin):
     repo_name = get_repo_name(plugin)
     repo_dir = get_repo_dir(repo_name)
     plugin_dir = get_plugin_dir(package_name, load_type, repo_name)
     try:
-        os.rmdir(repo_dir)
+        shutil.rmtree(repo_dir)
     except FileNotFoundError:
         pass
     try:
@@ -198,6 +222,8 @@ if __name__ == '__main__':
         cb = install_plugin
     elif sys.argv[1] == 'update':
         cb = update_plugin
+    elif sys.argv[1] == 'clean':
+        cb = clean_plugin
     else:
         raise RuntimeError('Unknown command \'{}\'.'.format(sys.argv[1]))
 
