@@ -62,7 +62,7 @@ def get_config_file():
 
 
 def read_config(conf_file):
-    logger().debug('Reading config file \'{}\''.format(conf_file))
+    logger().debug('Reading config file {}.'.format(repr(conf_file)))
     with open(conf_file, mode='r') as cf:
         return json.load(cf)
 
@@ -79,7 +79,7 @@ def install_github_plugin(package_name, load_type, plugin):
     repo_name = get_github_repo_name(plugin)
     repo_dir = get_repo_dir(repo_name)
     if os.path.isdir(repo_dir) and os.path.isdir(os.path.join(repo_dir, '.git')):
-        logger().warning(indent_lines('Plugin repo \'{}\' exists.', 6).format(repo_name))
+        logger().warning(indent_lines('Plugin repo {} exists.', 6).format(repr(repo_name)))
     else:
         repo_url = '/'.join(['https://github.com', plugin['source']]) + '.git'
         r = subprocess.run(['git', 'clone', repo_url, repo_dir],
@@ -109,7 +109,7 @@ def install_github_plugin(package_name, load_type, plugin):
 def update_github_plugin(package_name, load_type, plugin):
     repo_name = get_github_repo_name(plugin)
     repo_dir = get_repo_dir(repo_name)
-    r = subprocess.run('cd \'{}\'; git pull'.format(repo_dir),
+    r = subprocess.run('cd {}; git pull'.format(repr(repo_dir)),
             shell=True,
             stdout=subprocess.PIPE, stderr=subprocess.PIPE,
             universal_newlines=True)
@@ -117,7 +117,7 @@ def update_github_plugin(package_name, load_type, plugin):
         logger('git').error(indent_lines(r.stderr, 6))
         return
     if r.stdout.strip() != 'Already up-to-date.':
-        logger().info(indent_lines('Updated \'{}\'.', 6).format(repo_name))
+        logger().info(indent_lines('Updated {}.', 6).format(repr(repo_name)))
 
 
 def remove_generic_plugin(package_name, load_type, plugin):
@@ -132,7 +132,7 @@ def remove_generic_plugin(package_name, load_type, plugin):
         os.unlink(plugin_dir)
     except FileNotFoundError:
         pass
-    logger().info(indent_lines('Removed \'{}\'.', 6).format(repo_name))
+    logger().info(indent_lines('Removed {}.', 6).format(repr(repo_name)))
 
 
 def clean_generic_plugin(package_name, load_type, plugin):
@@ -162,8 +162,8 @@ def get_plugin_callbacks(plugin):
         return PLUGIN_CALLBACKS[plugin['type']]
     except KeyError:
         raise RuntimeError(
-                'Plugin type \'{}\' not supported.'
-                .format(plugin['type']))
+                'Plugin type {} not supported.'
+                .format(repr(plugin['type'])))
 
 
 def get_repo_name(plugin):
@@ -197,10 +197,10 @@ def remove_plugin(package_name, load_type, plugin, rest_argv):
 
 def list_plugin(package_name, load_type, plugin, rest_argv):
     if len(rest_argv) == 0 or get_repo_name(plugin) in rest_argv:
-        logger().info(indent_lines('Type: \'{}\'.', 6).format(plugin['type']))
-        logger().info(indent_lines('Source: \'{}\'.', 6).format(plugin['source']))
+        logger().info(indent_lines('Type: {}', 6).format(repr(plugin['type'])))
+        logger().info(indent_lines('Source: {}', 6).format(repr(plugin['source'])))
         if 'subpath' in plugin:
-            logger().info(indent_lines('Subpath: \'{}\'.', 6).format(plugin['subpath']))
+            logger().info(indent_lines('Subpath: {}', 6).format(repr(plugin['subpath'])))
 
 
 def normalize_plugin_spec(plugin):
@@ -215,14 +215,14 @@ def walk_package(package_name, conf, rest_argv, cb):
     ensure_dir_exists(get_package_dir(package_name))
     for idx, (load_type, plugin_list) in enumerate(conf.items(), start=1):
         logger().info(
-                indent_lines('({}/{}) Directory \'{}\'', 2)
-                .format(idx, len(conf), load_type))
+                indent_lines('({}/{}) Directory {}', 2)
+                .format(idx, len(conf), repr(load_type)))
         ensure_dir_exists(get_load_type_dir(package_name, load_type))
         for idx, p in enumerate(plugin_list, start=1):
             p = normalize_plugin_spec(p)
             logger().info(
-                    indent_lines('({}/{}) Plugin \'{}\'', 4)
-                    .format(idx, len(plugin_list), p['source']))
+                    indent_lines('({}/{}) Plugin {}', 4)
+                    .format(idx, len(plugin_list), repr(p['source'])))
             cb(package_name, load_type, p, rest_argv)
 
 
@@ -247,13 +247,13 @@ if __name__ == '__main__':
     elif sys.argv[1] == 'list':
         cb = list_plugin
     else:
-        raise RuntimeError('Unknown command \'{}\'.'.format(sys.argv[1]))
+        raise RuntimeError('Unknown command {}.'.format(repr(sys.argv[1])))
 
     rest_argv = sys.argv[2:]
     for idx, (pack, conf) in enumerate(config.items(), start=1):
         logger().info(
-                '({}/{}) Package \'{}\''
-                .format(idx, len(config), pack))
+                '({}/{}) Package {}'
+                .format(idx, len(config), repr(pack)))
         walk_package(pack, conf, rest_argv, cb)
 
     if sys.argv[1] != 'list':
