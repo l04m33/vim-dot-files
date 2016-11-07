@@ -5,6 +5,7 @@ import os
 import sys
 import json
 import subprocess
+import multiprocessing
 import shutil
 import logging
 from collections import namedtuple
@@ -106,13 +107,33 @@ def install_github_plugin(package_name, load_type, plugin):
         logger('symlink').error(indent_lines(repr(e), 6))
 
 
+def cmd_after_cd(dir_path, cmd):
+    try:
+        os.chdir(dir_path)
+        r = subprocess.run(cmd,
+                stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                universal_newlines=True)
+        return r
+    except Exception as e:
+        return e
+
+
+worker_pool = None
+
+def run_in_dir(dir_path, cmd):
+    global worker_pool
+    if worker_pool is None:
+        worker_pool = multiprocessing.Pool(processes=1)
+    r = worker_pool.apply(cmd_after_cd, args=(dir_path, cmd))
+    if isinstance(r, Exception):
+        raise r
+    return r
+
+
 def update_github_plugin(package_name, load_type, plugin):
     repo_name = get_github_repo_name(plugin)
     repo_dir = get_repo_dir(repo_name)
-    r = subprocess.run('cd {}; git pull'.format(repr(repo_dir)),
-            shell=True,
-            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-            universal_newlines=True)
+    r = run_in_dir(repo_dir, ['git', 'pull'])
     if r.returncode != 0:
         logger('git').error(indent_lines(r.stderr, 6))
         return
