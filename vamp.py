@@ -19,6 +19,11 @@ CONFIG_FILE_NAME = 'vamp.json'
 MARKER_FILE_NAME = '.vamp'
 
 
+WORKER_COUNT = 5
+work_list = None
+worker_pool = None
+
+
 def logger(name=''):
     if name == '':
         name = SCRIPT_NAME
@@ -63,13 +68,9 @@ def get_config_file():
 
 
 def read_config(conf_file):
-    logger().debug('Reading config file {}.'.format(repr(conf_file)))
+    logger().debug('Reading config file %r.', conf_file)
     with open(conf_file, mode='r') as cf:
         return json.load(cf)
-
-
-def indent_lines(text, n):
-    return os.linesep.join([(' ' * n) + line for line in text.split('\n')])
 
 
 def get_github_repo_name(plugin):
@@ -80,16 +81,15 @@ def install_github_plugin(package_name, load_type, plugin):
     repo_name = get_github_repo_name(plugin)
     repo_dir = get_repo_dir(repo_name)
     if os.path.isdir(repo_dir) and os.path.isdir(os.path.join(repo_dir, '.git')):
-        logger().warning(indent_lines('Plugin repo {} exists.', 6).format(repr(repo_name)))
+        logger().debug('Plugin repo %r exists.', repo_name)
     else:
         repo_url = '/'.join(['https://github.com', plugin['source']]) + '.git'
         r = subprocess.run(['git', 'clone', repo_url, repo_dir],
                 stdout=subprocess.PIPE, stderr=subprocess.PIPE,
                 universal_newlines=True)
         if r.returncode != 0:
-            logger('git').error(indent_lines(r.stderr, 6))
             remove_generic_plugin(package_name, load_type, plugin)
-            return
+            raise RuntimeError(r.stderr)
         marker_file = os.path.join(repo_dir, MARKER_FILE_NAME)
         touch(marker_file)
 
@@ -98,13 +98,21 @@ def install_github_plugin(package_name, load_type, plugin):
     else:
         ln_target = repo_dir
 
+    ln_path = get_plugin_dir(package_name, load_type, repo_name)
     try:
-        os.symlink(
-                ln_target,
-                get_plugin_dir(package_name, load_type, repo_name),
-                target_is_directory=True)
-    except Exception as e:
-        logger('symlink').error(indent_lines(repr(e), 6))
+        os.symlink(ln_target, ln_path, target_is_directory=True)
+    except FileExistsError:
+        if os.path.islink(ln_path):
+            old_ln_target = os.readlink(ln_path)
+            if old_ln_target != ln_target:
+                raise RuntimeError(
+                        '{} is a symlink that points to a wrong path.'
+                        .format(repr(ln_path)))
+        else:
+            raise RuntimeError(
+                    '{} exists but is not a symlink.'
+                    .format(repr(ln_path)))
+    return 'Installed'
 
 
 def cmd_after_cd(dir_path, cmd):
@@ -118,27 +126,16 @@ def cmd_after_cd(dir_path, cmd):
         return e
 
 
-worker_pool = None
-
-def run_in_dir(dir_path, cmd):
-    global worker_pool
-    if worker_pool is None:
-        worker_pool = multiprocessing.Pool(processes=1)
-    r = worker_pool.apply(cmd_after_cd, args=(dir_path, cmd))
-    if isinstance(r, Exception):
-        raise r
-    return r
-
-
 def update_github_plugin(package_name, load_type, plugin):
     repo_name = get_github_repo_name(plugin)
     repo_dir = get_repo_dir(repo_name)
-    r = run_in_dir(repo_dir, ['git', 'pull'])
+    r = cmd_after_cd(repo_dir, ['git', 'pull'])
+    if isinstance(r, Exception):
+        raise r
     if r.returncode != 0:
-        logger('git').error(indent_lines(r.stderr, 6))
-        return
+        raise RuntimeError(r.stderr)
     if r.stdout.strip() != 'Already up-to-date.':
-        logger().info(indent_lines('Updated {}.', 6).format(repr(repo_name)))
+        return 'Updated'
 
 
 def remove_generic_plugin(package_name, load_type, plugin):
@@ -153,7 +150,7 @@ def remove_generic_plugin(package_name, load_type, plugin):
         os.unlink(plugin_dir)
     except FileNotFoundError:
         pass
-    logger().info(indent_lines('Removed {}.', 6).format(repr(repo_name)))
+    return 'Removed'
 
 
 def clean_generic_plugin(package_name, load_type, plugin):
@@ -161,7 +158,7 @@ def clean_generic_plugin(package_name, load_type, plugin):
     repo_dir = get_repo_dir(repo_name)
     marker_file = os.path.join(repo_dir, MARKER_FILE_NAME)
     if os.path.isdir(repo_dir) and not os.path.isfile(marker_file):
-        remove_generic_plugin(package_name, load_type, plugin)
+        return remove_generic_plugin(package_name, load_type, plugin)
 
 
 PluginCallbacks = namedtuple('PluginCallbacks',
@@ -192,36 +189,73 @@ def get_repo_name(plugin):
     return repo_name_cb(plugin)
 
 
+def apply_async(func, package_name, load_type, plugin):
+    global work_list
+    global worker_pool
+    if work_list is None:
+        work_list = []
+    if worker_pool is None:
+        worker_pool = multiprocessing.Pool(processes=WORKER_COUNT)
+    work_list.append(
+            worker_pool.apply_async(
+                func, args=(package_name, load_type, plugin),
+                callback=lambda res: async_work_success(plugin, res),
+                error_callback=lambda exc: async_work_fail(plugin, exc)))
+
+
+def async_work_success(plugin, result):
+    if result is not None:
+        logger().info('Done processing %r: %s',
+                get_repo_name(plugin), str(result))
+    else:
+        logger().info('Done processing %r', get_repo_name(plugin))
+
+
+def async_work_fail(plugin, exc):
+    logger().error('Failed to process %r: %s', get_repo_name(plugin), str(exc))
+
+
 def install_plugin(package_name, load_type, plugin, rest_argv):
     if len(rest_argv) == 0 or get_repo_name(plugin) in rest_argv:
         install_cb = get_plugin_callbacks(plugin).install
-        return install_cb(package_name, load_type, plugin)
+        apply_async(install_cb, package_name, load_type, plugin)
 
 
 def update_plugin(package_name, load_type, plugin, rest_argv):
     if len(rest_argv) == 0 or get_repo_name(plugin) in rest_argv:
         update_cb = get_plugin_callbacks(plugin).update
-        return update_cb(package_name, load_type, plugin)
+        apply_async(update_cb, package_name, load_type, plugin)
 
 
 def clean_plugin(package_name, load_type, plugin, rest_argv):
     if len(rest_argv) == 0 or get_repo_name(plugin) in rest_argv:
         clean_cb = get_plugin_callbacks(plugin).clean
-        return clean_cb(package_name, load_type, plugin)
+        try:
+            result = clean_cb(package_name, load_type, plugin)
+        except Exception as e:
+            async_work_fail(plugin, e)
+            return
+        async_work_success(plugin, result)
 
 
 def remove_plugin(package_name, load_type, plugin, rest_argv):
     if len(rest_argv) == 0 or get_repo_name(plugin) in rest_argv:
         remove_cb = get_plugin_callbacks(plugin).remove
-        return remove_cb(package_name, load_type, plugin)
+        try:
+            result = remove_cb(package_name, load_type, plugin)
+        except Exception as e:
+            async_work_fail(plugin, e)
+            return
+        async_work_success(plugin, result)
 
 
 def list_plugin(package_name, load_type, plugin, rest_argv):
     if len(rest_argv) == 0 or get_repo_name(plugin) in rest_argv:
-        logger().info(indent_lines('Type: {}', 6).format(repr(plugin['type'])))
-        logger().info(indent_lines('Source: {}', 6).format(repr(plugin['source'])))
+        logger().info('---------------------------')
+        logger().info('Type: %r', plugin['type'])
+        logger().info('Source: %r', plugin['source'])
         if 'subpath' in plugin:
-            logger().info(indent_lines('Subpath: {}', 6).format(repr(plugin['subpath'])))
+            logger().info('Subpath: %r', plugin['subpath'])
 
 
 def normalize_plugin_spec(plugin):
@@ -235,20 +269,16 @@ def normalize_plugin_spec(plugin):
 def walk_package(package_name, conf, rest_argv, cb):
     ensure_dir_exists(get_package_dir(package_name))
     for idx, (load_type, plugin_list) in enumerate(conf.items(), start=1):
-        logger().info(
-                indent_lines('({}/{}) Directory {}', 2)
-                .format(idx, len(conf), repr(load_type)))
+        logger().debug('(%d/%d) Directory %r', idx, len(conf), load_type)
         ensure_dir_exists(get_load_type_dir(package_name, load_type))
         for idx, p in enumerate(plugin_list, start=1):
             p = normalize_plugin_spec(p)
-            logger().info(
-                    indent_lines('({}/{}) Plugin {}', 4)
-                    .format(idx, len(plugin_list), repr(p['source'])))
+            logger().debug('(%d/%d) Plugin %r', idx, len(plugin_list), get_repo_name(p))
             cb(package_name, load_type, p, rest_argv)
 
 
 if __name__ == '__main__':
-    logging.basicConfig(level='DEBUG')
+    logging.basicConfig(level='INFO')
     config = read_config(get_config_file())
 
     ensure_dir_exists(os.path.join(WORKING_DIR, PACK_DIR_NAME))
@@ -272,10 +302,12 @@ if __name__ == '__main__':
 
     rest_argv = sys.argv[2:]
     for idx, (pack, conf) in enumerate(config.items(), start=1):
-        logger().info(
-                '({}/{}) Package {}'
-                .format(idx, len(config), repr(pack)))
+        logger().debug('(%d/%d) Package %r', idx, len(config), pack)
         walk_package(pack, conf, rest_argv, cb)
+
+    if work_list is not None:
+        for r in work_list:
+            r.wait()
 
     if sys.argv[1] != 'list':
         logger().info('Running helptags.')
