@@ -7,6 +7,7 @@ import json
 import subprocess
 import multiprocessing
 import shutil
+import stat
 import logging
 from collections import namedtuple
 
@@ -137,14 +138,26 @@ def update_github_plugin(package_name, load_type, plugin):
         return 'Updated'
 
 
+def handle_rmtree_error(func, path, exc_info):
+    exc = exc_info[1]
+    if isinstance(exc, FileNotFoundError):
+        pass
+    elif isinstance(exc, PermissionError):
+        # For windows
+        if not os.access(path, os.W_OK):
+            os.chmod(path, stat.S_IWUSR)
+            func(path)
+        else:
+            raise
+    else:
+        raise
+
+
 def remove_generic_plugin(package_name, load_type, plugin):
     repo_name = get_repo_name(plugin)
     repo_dir = get_repo_dir(repo_name)
     plugin_dir = get_plugin_dir(package_name, load_type, repo_name)
-    try:
-        shutil.rmtree(repo_dir)
-    except FileNotFoundError:
-        pass
+    shutil.rmtree(repo_dir, ignore_errors=False, onerror=handle_rmtree_error)
     try:
         os.unlink(plugin_dir)
     except FileNotFoundError:
