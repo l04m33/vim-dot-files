@@ -103,8 +103,7 @@ def install_github_plugin(package_name, load_type, plugin):
         os.symlink(ln_target, ln_path, target_is_directory=True)
     except FileExistsError:
         if os.path.islink(ln_path):
-            old_ln_target = os.readlink(ln_path)
-            if old_ln_target != ln_target:
+            if not os.path.samefile(ln_path, ln_target):
                 raise RuntimeError(
                         '{} is a symlink that points to a wrong path.'
                         .format(repr(ln_path)))
