@@ -7,6 +7,7 @@
             "vim-airline/vim-airline",
             "vim-airline/vim-airline-themes",
             "junegunn/goyo.vim",
+            "junegunn/limelight.vim",
 
             "kien/ctrlp.vim",
             "fisadev/vim-ctrlp-cmdpalette",
@@ -18,7 +19,7 @@
             "davidhalter/jedi-vim",
             "nvie/vim-flake8",
             "zah/nim.vim",
-            "kovisoft/slimv",
+            "kovisoft/paredit",
             "jamessan/vim-gnupg",
             {
                 "source": "rstacruz/sparkup",
