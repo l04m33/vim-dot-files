@@ -1,9 +1,5 @@
 set nocp
 
-function! MySys()
-    return "linux"
-endfunction
-
 """"""""" Plugin settings """""""""
 
 " airline
@@ -68,11 +64,7 @@ if filereadable(s:colorscheme_file)
 endif
 
 if has("gui_running")
-    if MySys() == "linux"
-        set gfn=Inconsolata\ NF\ Custom\ 13
-    elseif MySys() == "windows"
-        set gfn=Inconsolata:h13
-    endif
+    set gfn=Inconsolata\ NF\ Custom\ 13
     set guioptions=aegit
 endif
 
