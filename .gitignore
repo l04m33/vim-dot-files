@@ -3,3 +3,4 @@ bundle/*
 .ropeproject
 pack
 repo
+local_config.vim

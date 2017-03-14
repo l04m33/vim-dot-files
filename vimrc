@@ -183,3 +183,11 @@ noremap <leader>/ :CtrlPCmdPalette<cr>
 command! -nargs=1 GrepR  execute 'silent grep! -R <args> .' | copen
 command! -nargs=0 GrepWR execute 'silent grep! -R '.expand('<cword>').' .' | copen
 
+" Local config
+let s:rc_path = resolve(expand('<sfile>:p'))
+let s:rc_home = fnamemodify(s:rc_path, ':h')
+let s:path_sep = s:rc_path[len(s:rc_home)]
+let s:local_config = join([s:rc_home, 'local_config.vim'], s:path_sep)
+if filereadable(s:local_config)
+    execute 'source ' . escape(s:local_config, ' "|\')
+endif
