@@ -20,6 +20,7 @@
             "nvie/vim-flake8",
             "zah/nim.vim",
             "kovisoft/paredit",
+            "junegunn/rainbow_parentheses.vim",
             "jamessan/vim-gnupg",
             {
                 "source": "rstacruz/sparkup",

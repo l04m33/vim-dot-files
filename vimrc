@@ -42,8 +42,13 @@ autocmd User GoyoEnter nested call <SID>goyo_enter()
 autocmd User GoyoLeave nested call <SID>goyo_leave()
 
 " vim-gnupg
-
 let g:GPGExecutable="gpg2"
+
+" rainbow_parentheses.vim
+augroup rainbow_lisp
+  autocmd!
+  autocmd FileType lisp,scheme,clojure RainbowParentheses
+augroup end
 
 """"""""" End of plugin settings """""""""
 
@@ -122,7 +127,6 @@ set nu
 set backupdir=~/.vim_tmp,.
 set directory=~/.vim_tmp,.
 set undodir=~/.vim_tmp,.
-let g:lisp_rainbow=1
 
 " Key mappings
 let mapleader=","
