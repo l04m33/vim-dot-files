@@ -19,7 +19,7 @@
             "davidhalter/jedi-vim",
             "nvie/vim-flake8",
             "zah/nim.vim",
-            "kovisoft/paredit",
+            "bhurlow/vim-parinfer",
             "junegunn/rainbow_parentheses.vim",
             "jamessan/vim-gnupg",
             {
