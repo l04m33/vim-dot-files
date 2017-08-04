@@ -12,7 +12,6 @@
             "kien/ctrlp.vim",
             "fisadev/vim-ctrlp-cmdpalette",
             "msanders/snipmate.vim",
-            "l04m33/vim-skuld",
             "easymotion/vim-easymotion",
             "tpope/vim-fugitive",
 
@@ -22,6 +21,10 @@
             "bhurlow/vim-parinfer",
             "junegunn/rainbow_parentheses.vim",
             "jamessan/vim-gnupg",
+            {
+                "source": "l04m33/vlime",
+                "subpath": "vim"
+            },
             {
                 "source": "rstacruz/sparkup",
                 "subpath": "vim"

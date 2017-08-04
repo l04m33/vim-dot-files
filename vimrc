@@ -15,13 +15,49 @@ let g:jedi#force_py_version=3
 " vim-flake8
 let g:flake8_cmd='python3-flake8'
 
-" slimv
-let g:slimv_leader='\'
-let g:paredit_leader='\'
+" Vlime
+let g:vlime_force_default_keys = v:true
+let g:vlime_enable_autodoc = v:true
 
-" skuld
-let g:skuld_progress_symbol="✓"
-let g:skuld_squash_symbol="✗"
+let g:vlime_window_settings = {
+            \ 'inspector': {
+                \ 'pos': 'belowright',
+                \ 'vertical': v:true,
+            \ },
+            \ 'preview': {
+                \ 'pos': 'belowright',
+                \ 'size': v:null,
+                \ 'vertical': v:true,
+            \ },
+            \ 'sldb': {
+                \ 'pos': 'belowright',
+                \ 'vertical': v:true,
+            \ },
+            \ 'trace': {
+                \ 'pos': 'belowright',
+                \ 'vertical': v:true,
+            \ },
+        \ }
+
+let g:vlime_contribs = [
+            \ 'SWANK-ARGLISTS',
+            \ 'SWANK-ASDF',
+            \ 'SWANK-C-P-C',
+            \ 'SWANK-FANCY-INSPECTOR',
+            \ 'SWANK-FUZZY',
+            \ 'SWANK-PACKAGE-FU',
+            \ 'SWANK-PRESENTATIONS',
+            \ 'SWANK-PRESENTATION-STREAMS',
+            \ 'SWANK-REPL',
+            \ 'SWANK-TRACE-DIALOG',
+            \ ]
+
+augroup CustomVlimeInputBuffer
+    autocmd!
+    autocmd FileType vlime_input inoremap <silent> <buffer> <tab> <c-r>=vlime#plugin#VlimeKey("tab")<cr>
+    autocmd FileType vlime_input setlocal omnifunc=vlime#plugin#CompleteFunc
+    autocmd FileType vlime_input setlocal indentexpr=vlime#plugin#CalcCurIndent()
+augroup end
 
 " Goyo
 function! s:goyo_enter()
