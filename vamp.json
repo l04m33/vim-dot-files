@@ -22,7 +22,7 @@
             "junegunn/rainbow_parentheses.vim",
             "jamessan/vim-gnupg",
             {
-                "source": "l04m33/vlime",
+                "source": "vlime/vlime",
                 "subpath": "vim"
             },
             {
